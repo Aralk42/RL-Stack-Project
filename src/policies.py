@@ -7,9 +7,9 @@ class policiy:
 
     def epsilon_greedy_policy(self,q_table,state,epsilon):  # Input: q for the given state
         if self.rng.random(1) < epsilon:
-            action = self.rng.choice(np.arange(q_table.shape[1])) 
+            action = self.rng.choice(np.arange(q_table.shape[2])) 
             # Return an action uniformly
         else:
-            action = np.argmax(q_table[state])  
+            action = np.argmax(q_table[state[0],state[1]])  
             # Action that maximizes q
         return int(action)
