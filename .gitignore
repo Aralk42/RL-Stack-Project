@@ -1,3 +1,7 @@
+experiments/results/
+*.npy
+*.jsonl
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.pyc
