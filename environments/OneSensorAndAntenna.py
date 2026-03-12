@@ -3,7 +3,7 @@ import gymnasium.spaces as gs
 import numpy as np
 
 class WPT_1to1(gym.Env):
-    def __init__(self, battery_units = 12,seed=42):
+    def __init__(self, battery_units = 12,seed=None):
 
         super().__init__() #todo ??
 
@@ -13,9 +13,11 @@ class WPT_1to1(gym.Env):
             [self.max_battery +1,60], 
             seed=seed
             )
+        self.n_states = self.observation_space.nvec
         
         # Acciones: 0 no enviar, 1 enviar
         self.action_space = gs.Discrete(2, seed=seed)
+        self.n_actions = self.action_space.n
       
         # Parámetros del sistema
         self.send_data_time = 60
@@ -71,7 +73,7 @@ class WPT_1to1(gym.Env):
     def reward_done(self, battery, action): 
 
         reward = 0 
-        # reward += battery / self.max_battery #todo
+        reward += battery / self.max_battery 
         terminated = False
         collecting_energy = not (
             self.time % 60 == 0 or
