@@ -1,3 +1,7 @@
 gymnasium
 numpy
 matplotlib
+tqdm
+streamlit
+plotly
+pandas
