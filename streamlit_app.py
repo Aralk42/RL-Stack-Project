@@ -5,8 +5,13 @@ import json
 import numpy as np
 import plotly.graph_objs as go
 
+from src.registro_clases import RegistroClases
+from src.run_from_dashboard import run_simulation
+
 # Carpeta de experimentos
 RUNS_DIR = Path("experiments/results/runs")
+
+rc = RegistroClases()
 
 tab1, tab2 = st.tabs(["📊 Dashboard", "🚀 Run Simulation"])
 
@@ -115,14 +120,27 @@ with tab1:
 
                 st.dataframe(df_config, use_container_width=True)
 
-with tab2: #todo!
+with tab2: 
 
     st.header("Run New Simulation")
+    env_names, agent_names, policy_names = rc.get_component_names()
+    print(env_names, agent_names, policy_names)
 
     with st.form("run_form"):
 
-        algorithm = st.text_input("Algorithm", "ABCMeta")
-        env = st.text_input("Environment", "type")
+        policy =  st.selectbox(
+            "Policy algorithm",
+            options=policy_names
+        )
+        env = st.selectbox(
+            "Environment",
+            options=env_names
+        )
+        agent = st.selectbox(
+            "Agents",
+            options=agent_names
+        )
+
 
         n_episodes = st.number_input("Episodes", 1, 100000, 1000)
         max_steps = st.number_input("Max Steps", 1, 10000, 1200)
@@ -137,3 +155,28 @@ with tab2: #todo!
         seed = st.number_input("Seed", 0, 100000, 42)
 
         submitted = st.form_submit_button("Run Simulation 🚀")
+
+        config_submit = {
+            "algorithm": policy,
+            "env": env,
+            "agent": agent,
+            "n_episodes": n_episodes,
+            "max_steps": max_steps,
+            "alpha": alpha,
+            "gamma": gamma,
+            "epsilon": epsilon,
+            "epsilon_decay": epsilon_decay,
+            "epsilon_min": epsilon_min,
+            "seed": seed
+        }
+
+
+        if submitted:
+
+            with open("temp_config.json","w") as f:
+                json.dump(config_submit,f)
+
+            run_simulation("temp_config.json")
+
+            st.success("Simulation started!")
+            st.rerun() # Para que la simulación aparezca automáticamente en el dashboard

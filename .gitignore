@@ -2,6 +2,9 @@ experiments/results/
 *.npy
 *.jsonl
 
+# json files
+*.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.pyc
